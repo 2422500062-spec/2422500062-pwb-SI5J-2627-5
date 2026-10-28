@@ -1,32 +1,21 @@
 <?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin_auth_controller extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
-
+        // Load model
         $this->load->model('Administrator_model');
     }
 
     public function index()
     {
-        $data['title'] = 'Farhan Pet Shop';
+        $data['title'] = 'Delphi Pet Shop';
 
-        $this->form_validation->set_rules(
-            'inputUsername',
-            'Username',
-            'required'
-        );
-
-        $this->form_validation->set_rules(
-            'inputPassword',
-            'Password',
-            'required'
-        );
-
+        $this->form_validation->set_rules('inputUsername', 'Username', 'required');
+        $this->form_validation->set_rules('inputPassword', 'Password', 'required');
         if ($this->form_validation->run() !== FALSE) {
             $this->_login();
         } else {
@@ -38,52 +27,38 @@ class Admin_auth_controller extends CI_Controller
     {
         $username = $this->input->post('inputUsername');
         $password = $this->input->post('inputPassword');
-
-        $check = $this->Administrator_model->check_login(
-            $username,
-            md5($password)
-        );
-
+        $check = $this->Administrator_model->check_login($username, md5($password));
         if ($check) {
-
+            // jika ada
             $session_data = array(
-                'id'          => $check['id_admin'],
-                'username'    => $check['username'],
-                'full_name'   => $check['full_name'],
+                'id'         => $check['id_admin'],
+                'username'   => $check['username'],
+                'full_name'  => $check['full_name'],
                 'admin_login' => TRUE
             );
-
             $this->session->set_userdata($session_data);
-
             redirect('admin');
-
         } else {
-
-            $this->session->set_flashdata(
-                'message',
-                '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Username dan password salah!
-                    <button type="button" class="close" data-dismiss="alert">
-                        <span>&times;</span>
-                    </button>
-                </div>'
-            );
-
+            // jika tidak ada
+            $this->session->set_flashdata('message', '
+            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
+                <div>
+                    Username dan password salah!!
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            ');
             redirect('admin/login');
         }
     }
 
     public function logout()
     {
-        $session_data = array(
-            'id',
-            'username',
-            'full_name',
-            'admin_login'
-        );
-
+        $session_data = array('id', 'username', 'full_name', 'admin_login');
         $this->session->unset_userdata($session_data);
-
         redirect('admin/login');
     }
 }

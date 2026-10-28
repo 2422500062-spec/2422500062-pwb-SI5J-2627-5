@@ -1,6 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+// Default controller (halaman pertama yang dibuka)
+$route['default_controller'] = 'login';
+
+// Route untuk login
+$route['login'] = 'login';
+$route['login/(:any)'] = 'login/$1';
+
+// Route untuk dashboard (setelah login)
+$route['dashboard'] = 'dashboard';
+
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -19,7 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | Please see the user guide for complete details:
 |
-|	https://codeigniter.com/userguide3/general/routing.html
+|	https://codeigniter.com/user_guide/general/routing.html
 |
 | -------------------------------------------------------------------------
 | RESERVED ROUTES
@@ -52,4 +64,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'dashboard';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['admin'] = 'administrator/admin_dashboard_controller/index';
+
+$route['admin'] = 'administrator/Admin_dashboard_controller/index';
+
+// Alias agar URL /login yang dibuka pengguna menuju halaman login admin.
+$route['login'] = 'administrator/Admin_auth_controller/index';
+$route['logout'] = 'administrator/Admin_auth_controller/logout';
+$route['admin/login'] = 'administrator/admin_auth_controller/index';
+$route['admin/logout'] = 'administrator/admin_auth_controller/logout';
+
+# admin kategori
+$route['admin/kategori'] = 'administrator/kategori_controller/index';
+$route['admin/kategori/tambah'] = 'administrator/kategori_controller/tambah_kategori';
+$route['admin/kategori/hapus/(:num)'] = 'administrator/kategori_controller/hapus_kategori/$1';
+$route['admin/kategori/ubah/(:num)'] = 'administrator/kategori_controller/ubah_kategori/$1';
+// Route produk
+$route['admin/produk'] = 'administrator/Produk_controller/index';
+$route['admin/produk/tambah'] = 'administrator/Produk_controller/tambah_produk';
+$route['admin/produk/ubah/(:num)'] = 'administrator/Produk_controller/ubah_produk/$1';
+$route['admin/produk/hapus/(:num)'] = 'administrator/Produk_controller/hapus_produk/$1';
+
+// Alias URL lama
+$route['administrator/produk'] = 'administrator/Produk_controller/index';
+$route['administrator/produk/tambah'] = 'administrator/Produk_controller/tambah_produk';
+$route['administrator/produk/ubah/(:num)'] = 'administrator/Produk_controller/ubah_produk/$1';
+$route['administrator/produk/hapus/(:num)'] = 'administrator/Produk_controller/hapus_produk/$1';
